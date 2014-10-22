@@ -90,6 +90,7 @@ addCar() {
   int confirmation;
   int i;
   time_t now;
+  time_t t = time(NULL);
 
   printf("\n  Carro entrando\n\tDigite a placa:  ");
   scanf("%s", &carPlate);
@@ -107,8 +108,9 @@ addCar() {
     time(&now);
     dates[searchCar(carPlate)] = now;
 
+    struct tm tm = *localtime(t);
     remainingSpaces--;
-    printf("\n\n    \033[92mCarro adicionado na garagem com a placa: %s.\033[0m\n", carPlate);
+    printf("\n\n    \033[92mCarro adicionado na garagem com a placa: %s, as %d.\033[0m\n", carPlate, tm.tm_hour);
     sleep(2);
   } else {
     addCar();
@@ -134,6 +136,7 @@ removeCar() {
       sleep(2);
       removeCar();
     }
+    printf("\n\n    \033[92mCarro adicionado na garagem com a placa: %s.\033[0m\n", carPlate);
   } else {
     removeCar();
   }
