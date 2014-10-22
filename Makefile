@@ -1,0 +1,2 @@
+program:
+	gcc alan.c
