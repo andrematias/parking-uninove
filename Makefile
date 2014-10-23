@@ -1,2 +1,2 @@
 program:
-	gcc alan.c
+	gcc alan.c -lm

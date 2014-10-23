@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <math.h>
 
 /**
  * const int TOTAL_PARKING_SPACES | numero total de espaços na garagem
@@ -20,8 +21,8 @@
  * const float TIME_PRICE | preço das demais horas
  */
 #define TOTAL_PARKING_SPACES 5
-#define INITIAL_PRICE = 25.00
-#define TIME_PRICE = 5.00
+#define INITIAL_PRICE  25.00
+#define TIME_PRICE  5.00
 
 /**
  * Global vars
@@ -30,6 +31,7 @@
  * int remainingSpaces | espaços remanecentes
  */
 char cars[TOTAL_PARKING_SPACES][50];
+char datesString[TOTAL_PARKING_SPACES][50];
 int dates[TOTAL_PARKING_SPACES];
 int remainingSpaces = TOTAL_PARKING_SPACES;
 
@@ -90,10 +92,10 @@ addCar() {
   int confirmation;
   int i;
   time_t now;
-  time_t t = time(NULL);
+  char buff[20];
 
   printf("\n  Carro entrando\n\tDigite a placa:  ");
-  scanf("%s", &carPlate);
+  scanf("%s", carPlate);
   printf("\n  Placa: %s. Confirma? (1 para sim / 2 para nao): ", carPlate);
   scanf("%d", &confirmation);
 
@@ -108,9 +110,10 @@ addCar() {
     time(&now);
     dates[searchCar(carPlate)] = now;
 
-    struct tm tm = *localtime(t);
     remainingSpaces--;
-    printf("\n\n    \033[92mCarro adicionado na garagem com a placa: %s, as %d.\033[0m\n", carPlate, tm.tm_hour);
+
+    strftime(buff, 20, "%Y-%m-%d %H:%M:%S", localtime(&now));
+    printf("\n\n    \033[92mCarro adicionado na garagem com a placa: %s, na data %s.\033[0m\n", carPlate, buff);
     sleep(2);
   } else {
     addCar();
@@ -121,9 +124,12 @@ removeCar() {
   char carPlate [50];
   int confirmation;
   int carFoundIndex;
+  time_t now;
+  char buff[20];
+  float seconds;
 
   printf("\n  Carro saindo\n\tDigite a placa:  ");
-  scanf("%s", &carPlate);
+  scanf("%s", carPlate);
   printf("\n  Placa: %s. Confirma? (1 para sim / 2 para nao): ", carPlate);
   scanf("%d", &confirmation);
 
@@ -135,8 +141,22 @@ removeCar() {
       listCar();
       sleep(2);
       removeCar();
+    } else {
+      time(&now);
+      strftime(buff, 20, "%Y-%m-%d %H:%M:%S", localtime(&now));
+
+      seconds = difftime(now, dates[carFoundIndex]);
+      printf("\n\n    \033[92mCarro removido da garagem com a placa: %s na data %s e se passaram %f horas e o valor foi R$ %f.\033[0m\n",
+          carPlate,
+          buff,
+          floor(seconds/3600),
+          calcHoursValue(seconds)
+      );
+      strcpy(cars[carFoundIndex], "");
+      dates[carFoundIndex] = 0;
+      remainingSpaces++;
     }
-    printf("\n\n    \033[92mCarro adicionado na garagem com a placa: %s.\033[0m\n", carPlate);
+
   } else {
     removeCar();
   }
@@ -173,4 +193,8 @@ int searchCar(char *carPlate) {
     }
   }
   return output;
+}
+
+int calcHoursValue(int seconds) {
+  return INITIAL_PRICE + (floor(seconds/3600) * TIME_PRICE);
 }
