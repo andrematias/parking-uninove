@@ -146,10 +146,10 @@ removeCar() {
       strftime(buff, 20, "%Y-%m-%d %H:%M:%S", localtime(&now));
 
       seconds = difftime(now, dates[carFoundIndex]);
-      printf("\n\n    \033[92mCarro removido da garagem com a placa: %s na data %s e se passaram %f horas e o valor foi R$ %f.\033[0m\n",
+      printf("\n\n    \033[92mCarro removido da garagem com a placa: %s na data %s e se passaram %f horas e o valor foi R$ %d.\033[0m\n",
           carPlate,
           buff,
-          floor(seconds/3600),
+          seconds/3600,
           calcHoursValue(seconds)
       );
       strcpy(cars[carFoundIndex], "");
