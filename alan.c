@@ -34,6 +34,7 @@ char cars[TOTAL_PARKING_SPACES][50];
 char datesString[TOTAL_PARKING_SPACES][50];
 int dates[TOTAL_PARKING_SPACES];
 int remainingSpaces = TOTAL_PARKING_SPACES;
+int totalValue = 0;
 
 void main()
 {
@@ -67,6 +68,19 @@ void main()
       }
       removeCar();
     }
+
+    if(parkingOption == 3) {
+        printf("\n\n  \033[92m O valor total do dia é: R$ %d.\033[0m\n\n\n\n", totalValue);
+        sleep(2);
+        exit(EXIT_SUCCESS);
+    }
+
+    if(parkingOption == 0) {
+        printf("\n\n  \033[92m Bye!\033[0m\n\n\n\n");
+        sleep(2);
+        exit(EXIT_SUCCESS);
+    }
+
   }
 }
 
@@ -127,6 +141,7 @@ removeCar() {
   time_t now;
   char buff[20];
   float seconds;
+  int hoursvalue;
 
   printf("\n  Carro saindo\n\tDigite a placa:  ");
   scanf("%s", carPlate);
@@ -146,15 +161,18 @@ removeCar() {
       strftime(buff, 20, "%Y-%m-%d %H:%M:%S", localtime(&now));
 
       seconds = difftime(now, dates[carFoundIndex]);
+      hoursvalue = calcHoursValue(seconds);
       printf("\n\n    \033[92mCarro removido da garagem com a placa: %s na data %s e se passaram %f horas e o valor foi R$ %d.\033[0m\n",
           carPlate,
           buff,
           seconds/3600,
-          calcHoursValue(seconds)
+          hoursvalue
       );
+      totalValue += hoursvalue;
       strcpy(cars[carFoundIndex], "");
       dates[carFoundIndex] = 0;
       remainingSpaces++;
+      sleep(2);
     }
 
   } else {
