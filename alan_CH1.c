@@ -52,7 +52,7 @@ void main()
   char option;
   int i;
 
-  for (i=0;i<TOTAL_PARKING_SPACES;i++)
+  for (i=0;i<TOTAL_PARKING_SPACES;i++) /** "Zera" os vetores a serem utilizados " */
       {
       cars[i][0]='\0';
       datesString[i][0]='\0';
@@ -157,7 +157,7 @@ void addCar() {
           {
           printf ("\n PLACA INVALIDA. (Tecle: 1 para corrigir / 2 para voltar): ");
           scanf ("%s", &confirm);
-          if (confirm != 1) {
+          if (confirm != '1') {
               return;
               }
           else {
@@ -243,8 +243,8 @@ void listCar() {
   printf("\t---------------------------------\n");
   printf("\t|    \033[93mplaca\033[0m   |  \033[93mhora de entrada\033[0m |\n");
   printf("\t---------------------------------\n");
-  for( i = 0; i < TOTAL_PARKING_SPACES; i++ ) {
-    if( strlen(cars[i]) != 0 ) {
+  for (i=0;i<TOTAL_PARKING_SPACES;i++) {
+    if (strlen(cars[i]) != 0 ) {
       printf("\t|  %8s  |    %d    |\n", cars[i], dates[i]);
       printf("\t---------------------------------\n");
     }
@@ -285,7 +285,7 @@ return (finalValue);
 /**
  *
  * Verifica se a placa fornecida eh uma placa valida
- * (três letras seguidas qye autro algarismos)
+ * (três letras seguidas de quatro algarismos)
  * @var chk | recebe valor 0 se a placa eh valida ou um valor maior se for invalida
  * @var ii | indices de posicao dos caracteres no texto */
 

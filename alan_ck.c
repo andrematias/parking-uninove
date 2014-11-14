@@ -52,7 +52,7 @@ void main()
   int option;
   int i;
 
-  for (i=0;i<TOTAL_PARKING_SPACES;i++)
+  for (i=0;i<TOTAL_PARKING_SPACES;i++) /** "Zera" os vetores a serem utilizados " */
       {
       cars[i][0]='\0';
       datesString[i][0]='\0';
@@ -282,7 +282,7 @@ return (finalValue);
 /**
  *
  * Verifica se a placa fornecida eh uma placa valida
- * (três letras seguidas qye autro algarismos)
+ * (três letras seguidas de quatro algarismos)
  * @var chk | recebe valor 0 se a placa eh valida ou um valor maior se for invalida
  * @var ii | indices de posicao dos caracteres no texto */
 
