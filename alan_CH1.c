@@ -50,6 +50,13 @@ float totalValue = 0.00;
 void main()
 {
   char option;
+  int i;
+
+  for (i=0;i<TOTAL_PARKING_SPACES;i++)
+      {
+      cars[i][0]='\0';
+      datesString[i][0]='\0';
+      }
 
   printf("\033[96m***************************************************** \n");
   printf("**             Bem vindo a nossa garagem           ** \n");
@@ -158,7 +165,7 @@ void addCar() {
               return;
               }
           }
-    for( i = 0; i <= TOTAL_PARKING_SPACES; ++ i ) {
+    for( i = 0; i < TOTAL_PARKING_SPACES; i++ ) {
       if( strlen(cars[i]) == 0 ) {
         strcpy(cars[i], carPlate);
         i = TOTAL_PARKING_SPACES;
@@ -236,7 +243,7 @@ void listCar() {
   printf("\t---------------------------------\n");
   printf("\t|    \033[93mplaca\033[0m   |  \033[93mhora de entrada\033[0m |\n");
   printf("\t---------------------------------\n");
-  for( i = 0; i <= TOTAL_PARKING_SPACES; ++ i ) {
+  for( i = 0; i < TOTAL_PARKING_SPACES; i++ ) {
     if( strlen(cars[i]) != 0 ) {
       printf("\t|  %8s  |    %d    |\n", cars[i], dates[i]);
       printf("\t---------------------------------\n");
@@ -254,7 +261,7 @@ void listCar() {
  */
 int searchCar(char *carPlate) {
   int output = -1, i;
-  for( i = 0; i <= TOTAL_PARKING_SPACES; ++ i ) {
+  for( i = 0; i < TOTAL_PARKING_SPACES; i++ ) {
     if( strcmp(cars[i], carPlate) == 0 ) {
       output = i;
     }
