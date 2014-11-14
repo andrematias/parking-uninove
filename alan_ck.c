@@ -71,44 +71,45 @@ void main()
         printf("\n\n  \033[1;31m Não ha vagas na garagem\033[0m\n");
         }
     option= parkingOptions();
-    if(option== 1) {
-      if(remainingSpaces == 0) {
-        printf("\n\n  \033[1;31m Não ha vagas na garagem\033[0m\n");
-        sleep(2);
-        continue;
-      }
-      addCar();
-    }
+    switch (option) {
+    case 1 :
+        if(remainingSpaces == 0) {
+          printf("\n\n  \033[1;31m NAO HA VAGAS\033[0m\n");
+          sleep(2);
+          continue;
+          }
+        addCar();
+        break;
 
-    if(option== 2) {
+    case 2 :
       if(remainingSpaces == TOTAL_PARKING_SPACES) {
-        printf("\n\n  \033[1;31m Não existem carros na garagem\033[0m\n");
-        sleep(2);
-        continue;
-      }
+          printf("\n\n  \033[1;31m Não existem carros na garagem\033[0m\n");
+          sleep(2);
+          continue;
+          }
       removeCar();
-    }
+      break;
 
-    if(option== 3) {
-        printf("\n\n  \033[92m O valor total do dia é: R$ %.2f.\033[0m\n\n\n\n", totalValue);
-        sleep(2);
-        exit(EXIT_SUCCESS);
-    }
+    case 3 :
+      printf("\n\n  \033[92m O valor total do dia é: R$ %.2f.\033[0m\n\n\n\n", totalValue);
+      sleep(2);
+      exit(EXIT_SUCCESS);
+      break;
 
-    if(option== 0) {
-        printf ("\n\tTEM CERTEZA QUE DESEJA SAIR SEM FAZER O FECHAMENTO?");
-        printf ("\n\tTodos os dados serao perdidos!\n\t\t\t(0 = Sim / 2 = Não): ");
-        scanf ("%d", &option);
-        if (option!=0) {
-            option=1;
-            }
-        else {
-            printf("\n\n  \033[92m Bye!\033[0m\n\n\n\n");
-            sleep(2);
-            exit(EXIT_SUCCESS);
-            }
+    case 0 :
+      printf ("\n\tTEM CERTEZA QUE DESEJA SAIR SEM FAZER O FECHAMENTO?");
+      printf ("\n\tTodos os dados serao perdidos!\n\t\t\t(0 = Sim / 2 = Não): ");
+      scanf ("%d", &option);
+      if (option!=0) {
+          parkingOptions();
+          }
+      else {
+          printf("\n\n  \033[92m Bye!\033[0m\n\n\n\n");
+          sleep(2);
+          exit(EXIT_SUCCESS);
+          }
+      break;
     }
-
   }
  return;
 }
