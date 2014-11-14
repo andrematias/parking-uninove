@@ -49,7 +49,7 @@ float totalValue = 0.00;
 
 void main()
 {
-  char option;
+  int option;
   int i;
 
   for (i=0;i<TOTAL_PARKING_SPACES;i++)
