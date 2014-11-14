@@ -28,7 +28,7 @@
 */
 int checkPlate (char texto[8]);
 int searchCar(char *carPlate);
-char parkingOptions();
+int parkingOptions();
 float calcValue(int mins);
 void listCar();
 void removeCar();
@@ -61,50 +61,48 @@ void main()
     printf("|    Vagas restantes: \033[93m%d\033[0m    |    Total de vagas \033[93m%d\033[0m    |", remainingSpaces, TOTAL_PARKING_SPACES);
     printf("\n-----------------------------------------------------\n\n");
     if(remainingSpaces == 0) {
-        printf("\n\n  \033[1;31m NAO HA VAGAS\033[0m\n");
+        printf("\n\n  \033[1;31m Não ha vagas na garagem\033[0m\n");
         }
-    option = parkingOptions();
-
-    switch (option) {
-    case '1' :
-        if(remainingSpaces == 0) {
-          printf("\n\n  \033[1;31m NAO HA VAGAS\033[0m\n");
-          sleep(2);
-          continue;
-          }
-        addCar();
-        break;
-
-    case '2' :
-      if(remainingSpaces == TOTAL_PARKING_SPACES) {
-          printf("\n\n  \033[1;31m Não existem carros na garagem\033[0m\n");
-          sleep(2);
-          continue;
-          }
-      removeCar();
-      break;
-
-    case '3' :
-      printf("\n\n  \033[92m O valor total do dia é: R$ %.2f.\033[0m\n\n\n\n", totalValue);
-      sleep(2);
-      exit(EXIT_SUCCESS);
-      break;
-
-    case'0' :
-      printf ("\n\tTEM CERTEZA QUE DESEJA SAIR SEM FAZER O FECHAMENTO?");
-      printf ("\n\tTodos os dados serao perdidos!\n\t\t\t(0 = Sim / 2 = Não): ");
-      scanf ("%s", &option);
-      if (option!='0') {
-          parkingOptions();
-          }
-      else {
-          printf("\n\n  \033[92m Bye!\033[0m\n\n\n\n");
-          sleep(2);
-          exit(EXIT_SUCCESS);
-          }
-      break;
+    option= parkingOptions();
+    if(option== 1) {
+      if(remainingSpaces == 0) {
+        printf("\n\n  \033[1;31m Não ha vagas na garagem\033[0m\n");
+        sleep(2);
+        continue;
+      }
+      addCar();
     }
-}
+
+    if(option== 2) {
+      if(remainingSpaces == TOTAL_PARKING_SPACES) {
+        printf("\n\n  \033[1;31m Não existem carros na garagem\033[0m\n");
+        sleep(2);
+        continue;
+      }
+      removeCar();
+    }
+
+    if(option== 3) {
+        printf("\n\n  \033[92m O valor total do dia é: R$ %.2f.\033[0m\n\n\n\n", totalValue);
+        sleep(2);
+        exit(EXIT_SUCCESS);
+    }
+
+    if(option== 0) {
+        printf ("\n\tTEM CERTEZA QUE DESEJA SAIR SEM FAZER O FECHAMENTO?");
+        printf ("\n\tTodos os dados serao perdidos!\n\t\t\t(0 = Sim / 2 = Não): ");
+        scanf ("%d", &option);
+        if (option!=0) {
+            option=1;
+            }
+        else {
+            printf("\n\n  \033[92m Bye!\033[0m\n\n\n\n");
+     //       sleep(2);
+            exit(EXIT_SUCCESS);
+            }
+    }
+
+  }
  return;
 }
 
@@ -113,12 +111,11 @@ void main()
  * Função que retorna a opção selecionada
  * @return int | opção escolhida
  */
-char parkingOptions() {
-  char output[2];
+int parkingOptions() {
+  int output;
   printf("\n\n  Escolha a função\n\n  • 1 - Entrada\n  • 2 - Saída\n  • 3 - Fechamento do Dia\n  • 0 - Encerrar :  ");
-  scanf ("%s", &output);
-  output[1]='\0';  /** Evita alguns problemas caso o usuario digite varios caracteres ao inves de um soh*/
-  return output[0];
+  scanf ("%d", &output);
+  return output;
 }
 
 /**
@@ -127,9 +124,9 @@ char parkingOptions() {
  * @return void
  */
 void addCar() {
-  char carPlate [8],
-       confirm;
-  int i;
+  char carPlate [8];
+  int confirm,
+      i;
   time_t now;
   char buff[20];
 
@@ -141,15 +138,15 @@ void addCar() {
           }
       }
   printf("\n  Placa: %s. Confirma? (1 para sim / 2 para nao): ", carPlate);
-  scanf("%s", &confirm);
-  if (confirm != '1') {
+  scanf("%d", &confirm);
+  if (confirm != 1) {
       return;
       }
   else {
       if (checkPlate(carPlate)!=0)
           {
           printf ("\n PLACA INVALIDA. (Tecle: 1 para corrigir / 2 para voltar): ");
-          scanf ("%s", &confirm);
+          scanf ("%d", &confirm);
           if (confirm != 1) {
               return;
               }
