@@ -16,7 +16,7 @@
 /**
  * const int TOTAL_SLOTS | numero total de vagas
  * const float INITIAL_PRICE | valor da primeira hora
- * const float TIME_PRICE | valor da fração adicional de 15 min
+ * const float TIME_PRICE | valor da fracao adicional de 15 min
  */
 #define TOTAL_SLOTS 4
 #define INITIAL_PRICE  20.00
@@ -60,8 +60,8 @@ void convertTime(long int, int);
  * Global vars
  * char cars | array de carros
  * char dates | array de datas
- * int freeSlots | espaços remanecentes
- * float totalValue | arrecadação total do dia
+ * int freeSlots | espacos remanecentes
+ * float totalValue | arrecadacao total do dia
  * fileP | apontador pro arquivo de saida
  */
 char reportFileName [15],
@@ -112,7 +112,7 @@ void main()
   while(1) {
 
     printf("\n----------------------------------------------------");
-    printf("\n|    Vagas livres: %d    |    Total de vagas %d    |", countFreeSlots(), TOTAL_SLOTS);
+    printf("\n|    Vagas livres: %2d    |    Total de vagas %2d    |", countFreeSlots(), TOTAL_SLOTS);
     printf("\n----------------------------------------------------\n\n");
     if(countFreeSlots() == 0) {
         printf("\n\n\tNAO HA VAGAS\n");
@@ -184,12 +184,12 @@ void main()
 
 /**
  *
- * Funcao que retorna a opção selecionada
+ * Funcao que retorna a opcao selecionada
  * @return int | opcao escolhida
  */
 char parkingOptions() {
   char output[2];
-  printf("\n\n  Escolha a tarefa:\n\n  • 1 - Entrada\n  • 2 - Saida\n  • 3 - Fechamento do Dia / Subtotal\n  • 4 - Lista carros estacionados\n  • 0 - Encerrar :  ");
+  printf("\n\n  Escolha a tarefa:\n\n  * 1 - Entrada\n  * 2 - Saida\n  * 3 - Fechamento do Dia / Subtotal\n  * 4 - Lista carros estacionados\n  * 0 - Encerrar :  ");
   scanf ("%s", &output);
   output[1]='\0';  /** Evita alguns problemas caso o usuario digite varios caracteres ao inves de apenas um*/
   return output[0];
@@ -198,7 +198,7 @@ char parkingOptions() {
 
 /**
  *
- * Função que adiciona carro
+ * Funcao que adiciona carro
  * @return void
  */
 void addCar() {
@@ -259,7 +259,7 @@ void removeCar() {
       carPlate[i] -= 32;       /** Passa as letras da placa do carro para maiusculas*/
       }
     }
-  carPlate[7] = '\0';              /** encerra a string carPlate na 8a. posição*/
+  carPlate[7] = '\0';              /** encerra a string carPlate na 8a. posicao*/
   if (searchCar(carPlate)<0) {
     printf("\n\n\tNenhum carro encontrado com a placa: %s\n", carPlate);
     sleep(1);
@@ -286,7 +286,7 @@ void removeCar() {
         convertTime(entryTime[i],0);
         fprintf (fileP, "\t");
         convertTime(exitTime,0);
-        fprintf (fileP, "\t%2dh %2dmin\tR$ %5.2f\tR$ %5.2f\n",minutes/60, minutes%60,hoursValue,totalValue);
+        fprintf (fileP, "\t%2dh %2dmin\tR$ %6.2f\tR$ %6.2f\n",minutes/60, minutes%60,hoursValue,totalValue);
         entryTime[aux] = 0;
         printf ("\n\tVaga %d Liberada\n\n", 1+searchCar(carPlate));
         carInSlot[aux] = 0;
@@ -355,7 +355,7 @@ return (finalValue);
 }
 
 /** Verifica se a placa fornecida eh uma placa valida (3 letras seguidas de 4 algarismos)
- * e verifica se a mesma placa já não está inserida no sistema;
+ * e verifica se a mesma placa ja nao esta inserida no sistema;
  * @var output | recebe valor 0 se a placa eh valida ou um valor maior se for invalida
  * @var ii | indices de posicao dos caracteres no texto */
 
@@ -377,7 +377,7 @@ int checkPlate (char text[8])
  return (output);
  }
 
- /** cria o nome do arquivo de saida com o padrão: YYYY-MM-DD.csv
+ /** cria o nome do arquivo de saida com o padrao: YYYY-MM-DD.csv
  * escreve o cabecalho do arquivo, com data e hora de inicio do sistema
  */
 
@@ -405,7 +405,7 @@ long int today;
 /** a funcao long int str2int (char text[8]), a seguir, converte text em um numero (long int),
     substituindo cada caracter pelo sei codigo ASCII correspondente. Funciona apenas para caracteres
     cujo codigo ascii tem dois digitos. Isso permite armazenar a placa em um vetor de long int,
-    muito mais fácil de lidar do que uma matriz de char.
+    muito mais facil de lidar do que uma matriz de char.
     */
 
 long int str2int (char text[8])
@@ -432,7 +432,7 @@ for (i=0;i<(TOTAL_SLOTS);i++) if (carInSlot[i]==0) output+=1;
 return (output);
 }
 
-/** a função nextFreeSlot retorna o indice da proxima vaga livre */
+/** a funcao nextFreeSlot retorna o indice da proxima vaga livre */
 
 int nextFreeSlot()
 {
@@ -455,9 +455,9 @@ for (i=0;i<7;i++){
 return;
 }
 
-/** a função presentDate recebe uma hora absoluta e imprime a data formatada
+/** a funcao presentDate recebe uma hora absoluta e imprime a data formatada
     (DD.MM.YYY). Se o parametro int a eh maior que 0, ela imprime na tela,
-    senão, imprime no arquivo de relatorio */
+    senao, imprime no arquivo de relatorio */
 
 
 void presentDate (long int anyTime, int a)
@@ -470,9 +470,9 @@ void presentDate (long int anyTime, int a)
   return;
 }
 
-/** a função presentDate recebe a uma hora absoluta e imprime a hora formatada
+/** a funcao presentDate recebe a uma hora absoluta e imprime a hora formatada
     (HH:MM). Se o parametro int a eh maior que 0, ela imprime na tela,
-    senão, imprime no arquivo de relatorio */
+    senao, imprime no arquivo de relatorio */
 
 void convertTime(long int anyTime, int a)
   {
