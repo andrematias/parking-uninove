@@ -444,12 +444,12 @@ fprintf (prnt, "------------------------------------\n");
 fprintf (prnt, "Data: %s | Entrada: %s\n", buf1, buf2);
 fprintf (prnt, "------------------------------------\n");
 fprintf (prnt, "Não nos responsabilizamos por ");
-fprintf (prnt, "pertences diexados no veiculo\n\n");
+fprintf (prnt, "pertences deixados no veiculo\n\n");
 fprintf (prnt, "Funcionamento das 06h as 22h\n");
 fprintf (prnt, "De Segunda-Feira a Sabado \n");
 fprintf (prnt, "Nao trabalhamos com pernoite\n\n");
 fprintf (prnt, "     Agradecemos a preferencia\n");
-fprintf (prnt, "____________________________________\n");
+fprintf (prnt, "------------------------------------\n");
 
 fprintf (prnt, "\f");
 
@@ -488,6 +488,7 @@ fprintf (prnt, "Funcionamento das 06h as 22h\n");
 fprintf (prnt, "De Segunda-Feira a Sabado \n");
 fprintf (prnt, "Nao trabalhamos com pernoite\n\n");
 fprintf (prnt, "     Agradecemos a preferencia\n\n");
+fprintf (prnt, "------------------------------------\n");
 
 fprintf (prnt, "\f");
 

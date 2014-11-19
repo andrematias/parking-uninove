@@ -418,7 +418,7 @@ fprintf (prnt, "Funcionamento das 06h as 22h\n");
 fprintf (prnt, "De Segunda-Feira a Sabado \n");
 fprintf (prnt, "Nao trabalhamos com pernoite\n\n");
 fprintf (prnt, "     Agradecemos a preferencia\n");
-fprintf (prnt, "____________________________________\n");
+fprintf (prnt, "------------------------------------\n");
 
 fprintf (prnt, "\f");
 
@@ -457,6 +457,7 @@ fprintf (prnt, "Funcionamento das 06h as 22h\n");
 fprintf (prnt, "De Segunda-Feira a Sabado \n");
 fprintf (prnt, "Nao trabalhamos com pernoite\n\n");
 fprintf (prnt, "     Agradecemos a preferencia\n\n");
+fprintf (prnt, "------------------------------------\n");
 
 fprintf (prnt, "\f");
 
