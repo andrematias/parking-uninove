@@ -39,7 +39,7 @@
  * void printExitSlip | imprime o recibo de saida na impressora lpt1
  * void convertTime | recebe a hora absoluta e imprime a hora formatada em HH:MM
 */
-int checkPlate (char text[8]);
+
 int searchCar(char *carPlate);
 int countFreeSlots ();
 long int absTimeNow();
@@ -61,13 +61,12 @@ void printExitSlip(char text[8], long int, long int, int , float);
  * float totalValue | arrecadação total do dia
  * fileP | apontador pro arquivo de saida
  */
+
 char carInSlot[TOTAL_SLOTS][8],
      reportFileName [15];
-long int entryTime[50],
-         exitTime;
+long int entryTime[TOTAL_SLOTS];
 float totalValue = 0.00;
 FILE* fileP;
-
 
 void main()
 {
@@ -161,7 +160,8 @@ void main()
  * Funcao que retorna a opção selecionada
  * @return int | opcao escolhida
  */
-char parkingOptions() {
+char parkingOptions()
+ {
   char opt[2];
   printf("\n\n  Escolha a tarefa:\n\n  * 1 - Entrada\n  * 2 - Saida\n  * 3 - Fechamento do Dia - Subtotal\n");
   printf("  * 4 - Lista de carros na garagem\n  * 0 - Encerrar\t\t --> ");
@@ -175,10 +175,10 @@ char parkingOptions() {
  * Função que adiciona carro
  * @return void
  */
-void addCar() {
-  char carPlate [8],
-       opt;
-  int aux, i;
+void addCar()
+{
+  char carPlate [8];
+  int aux, i, opt;
 
   printf("\n  Carro entrando\n\tDigite a placa:  ");
   scanf("%s", carPlate);
@@ -187,25 +187,13 @@ void addCar() {
           carPlate[i] -= 32; /** Passa as letras da placa do carro para maiusculas*/
           }
       }
+  carPlate[7] = '\0';
   printf("\n  Placa: %s. Confirma? (1 para sim / 2 para nao): ", carPlate);
-  scanf("%s", &opt);
-  if (opt != '1') {
-      return;
-      }
-  else {
-      while (checkPlate(carPlate)>0) {
-          printf (" (Tecle: 1 para corrigir / 2 para voltar): ");
-          scanf ("%s", &opt);
-          if (opt != '1') {
-            return;
-            }
-          else {
-            addCar();
-            return;
-            }
-          }
-      }
-    for( i = 0; i < TOTAL_SLOTS; i++ ) {
+
+  scanf("%d", &opt);
+  printf (" opt= %d", opt);
+  if (opt == 1) {
+    for( i = TOTAL_SLOTS-1; i>=0; i-- ) {
       if( carInSlot[i][0] == '\0' ) {
         aux=i;
       }
@@ -219,17 +207,20 @@ void addCar() {
     printEntrySlip (carPlate, entryTime[aux]);
     sleep(1);
   }
+return;
+}
 
-
-void removeCar() {
-  char carPlate [8];
-  int opt,
+void removeCar()
+{
+  char carPlate [8],
+       buff[20];
+  int minutes,
+      opt,
       carFoundIndex,
       aux, i;
   time_t now;
-  char buff[20];
-  int minutes;
   float hoursValue;
+  long int exitTime;
 
   printf("\n  Carro saindo\n\tDigite a placa:  ");
   scanf("%s", carPlate);
@@ -239,7 +230,6 @@ void removeCar() {
           }
       }
   carPlate[7] = '\0';              /** encerra a string carPlate na 8a. posição*/
-
   carFoundIndex = searchCar(carPlate);
   if(carFoundIndex == -1) {
     printf("\n\n   Nenhum carro encontrado com a placa: %s\n", carPlate);
@@ -261,8 +251,8 @@ void removeCar() {
     convertTime(exitTime,1);
     printf ("\n\tEstadia: %dh %dmins.\n\tValor: R$ %.2f.\n", minutes/60, minutes%60, hoursValue);
     printf ("\n\t Confirma? ( 1 para Sim / 2 para Corrigir / 3 para Voltar): ");
-    scanf ("%s", &opt);
-    if (opt=='1') {
+    scanf ("%d", &opt);
+    if (opt==1) {
       totalValue += hoursValue;
       fprintf (fileP, "%s\t",carPlate);
       convertTime(entryTime[i],0);
@@ -274,12 +264,13 @@ void removeCar() {
       carInSlot[aux][0] = '\0';
       sleep(1);
       }
-   else if (opt=='2') removeCar();
+   else if (opt==2) removeCar();
    }
   return;
 }
 
-void carList() {
+void carList()
+{
   int i;
 
   printf("\n\t-------------------------------------------");
@@ -292,7 +283,7 @@ void carList() {
       printf("\n\t|   %2d   |  %8s  |      ", i+1, carInSlot[i]);
       convertTime (entryTime[i],1);
       printf ("       |");
-      printf("\n\t-------------------------------------------\n");
+      printf("\n\t-------------------------------------------");
     }
   }
  return;
@@ -335,8 +326,8 @@ return (finalValue);
  * separada por tabulações. Escreve o cabecalho do arquivo, com data e hora de inicio do sistema
  */
 
-void makeReportFile () {
-
+void makeReportFile ()
+{
 int i;
 char buff [20];
 long int today;
@@ -365,29 +356,6 @@ int i, output = 0;
 for (i=0;i<(TOTAL_SLOTS);i++) if (carInSlot[i][0]=='\0') output+=1;
 return (output);
 }
-
-/** Verifica se a placa fornecida eh uma placa valida (3 letras seguidas de 4 algarismos)
- * e verifica se a mesma placa ja nao esta inserida no sistema;
- * @var output | recebe valor 0 se a placa eh valida ou um valor maior se for invalida
- * @var ii | indices de posicao dos caracteres no texto */
-
-int checkPlate (char text[8])
- {
- int output=0, i;
-
- for (i=0;i<3;i++) if ((text[i]<65)||(text[i]>90)) output+=1;
- for (i=3;i<6;i++) if ((text[i]<48)||(text[i]>57)) output+=1;
- if (text[7]!='\0') output+=1;
- if (output>0) {
-  printf ("\n\t%s - PLACA INVALIDA. ", text);
-  return (output);
-  }
- else if (searchCar(text)>=0) {
-    printf ("\n\t%s - CARRO JA INSERIDO NA VAGA %d. \n\t\t", text, 1+searchCar(text));
-    output +=1;
-    }
- return (output);
- }
 
  /** a funcao presentDate recebe uma hora absoluta e imprime a data formatada
     (DD.MM.YYY). Se o parametro int a eh maior que 0, ela imprime na tela,
@@ -452,9 +420,9 @@ fprintf (prnt, "Nao trabalhamos com pernoite\n\n");
 fprintf (prnt, "     Agradecemos a preferencia\n");
 fprintf (prnt, "____________________________________\n");
 
-fprintf(prnt, "\f");
+fprintf (prnt, "\f");
 
-fclose(prnt);
+fclose (prnt);
 
 return (0);
 
@@ -490,10 +458,9 @@ fprintf (prnt, "De Segunda-Feira a Sabado \n");
 fprintf (prnt, "Nao trabalhamos com pernoite\n\n");
 fprintf (prnt, "     Agradecemos a preferencia\n\n");
 
-fprintf(prnt, "\f");
+fprintf (prnt, "\f");
 
-fclose(prnt);
+fclose (prnt);
 
 return (0);
-
 }

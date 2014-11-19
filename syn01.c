@@ -63,16 +63,15 @@ void printExitSlip(char text[8], long int, long int, int , float);
  */
 char carInSlot[TOTAL_SLOTS][8],
      reportFileName [15];
-long int entryTime[50],
-         exitTime;
+long int entryTime[TOTAL_SLOTS];
 float totalValue = 0.00;
 FILE* fileP;
 
 
 void main()
 {
-  char opt;
-  int i;
+  char opt1;
+  int i, opt;
 
   for (i=0;i<TOTAL_SLOTS;i++) { /** "Zera" os vetores a serem utilizados " */
       carInSlot[i][0]='\0';
@@ -92,9 +91,9 @@ void main()
     if(countFreeSlots()==0) {
         printf("\n\n   NAO HA VAGAS");
         }
-    opt = parkingOptions();
+    opt1 = parkingOptions();
 
-    switch (opt) {
+    switch (opt1) {
     case '1' :
         if(countFreeSlots() == 0) {
           printf("\n\n   NAO HA VAGAS");
@@ -116,8 +115,8 @@ void main()
     case '3' :
       printf("\n\n\t\tSUBTOTAL DO DIA: R$ %.2f.\n\n", totalValue);
       printf ("\n\nDeseja encerrar o dia? (1 = Sim / 2 = Nao): ");
-      scanf ("%s", &opt);
-      if (opt=='1') {
+      scanf ("%d", &opt);
+      if (opt==1) {
           fprintf (fileP, "\n\t\t\t\tTOTAL DO DIA: R$ %.2f", totalValue);
           fclose(fileP);
           printf("\n\n\t\t Ate logo!\n\n\n\n");
@@ -144,8 +143,8 @@ void main()
     case'0' :
       printf ("\n\tTEM CERTEZA QUE DESEJA SAIR SEM FAZER O FECHAMENTO?");
       printf ("\n\tTodos os dados serao perdidos!\n\t\t\t(0 = Sim / 2 = Nao): ");
-      scanf ("%s", &opt);
-      if (opt=='0') {
+      scanf ("%d", &opt);
+      if (opt==0) {
           printf("\n\n\t Ate logo!\n\n\n\n");
           sleep(2);
           exit(EXIT_SUCCESS);
@@ -162,12 +161,12 @@ void main()
  * @return int | opcao escolhida
  */
 char parkingOptions() {
-  char opt[2];
+  char opt1[2];
   printf("\n\n  Escolha a tarefa:\n\n  * 1 - Entrada\n  * 2 - Saida\n  * 3 - Fechamento do Dia - Subtotal\n");
   printf("  * 4 - Lista de carros na garagem\n  * 0 - Encerrar\t\t --> ");
-  scanf ("%s", &opt);
-  opt[1]='\0';  /** Evita alguns problemas caso o usuario digite varios caracteres ao inves de apenas um*/
-  return opt[0];
+  scanf ("%s", &opt1);
+  opt1[1]='\0';  /** Evita alguns problemas caso o usuario digite varios caracteres ao inves de apenas um*/
+  return opt1[0];
 }
 
 /**
@@ -176,9 +175,8 @@ char parkingOptions() {
  * @return void
  */
 void addCar() {
-  char carPlate [8],
-       opt;
-  int aux, i;
+  char carPlate [8];
+  int aux, i, opt;
 
   printf("\n  Carro entrando\n\tDigite a placa:  ");
   scanf("%s", carPlate);
@@ -188,15 +186,15 @@ void addCar() {
           }
       }
   printf("\n  Placa: %s. Confirma? (1 para sim / 2 para nao): ", carPlate);
-  scanf("%s", &opt);
-  if (opt != '1') {
+  scanf("%d", &opt);
+  if (opt != 1) {
       return;
       }
   else {
       while (checkPlate(carPlate)>0) {
           printf (" (Tecle: 1 para corrigir / 2 para voltar): ");
-          scanf ("%s", &opt);
-          if (opt != '1') {
+          scanf ("%d", &opt);
+          if (opt != 1) {
             return;
             }
           else {
@@ -205,7 +203,7 @@ void addCar() {
             }
           }
       }
-    for( i = 0; i < TOTAL_SLOTS; i++ ) {
+    for( i = TOTAL_SLOTS; i >=0; i-- ) {
       if( carInSlot[i][0] == '\0' ) {
         aux=i;
       }
@@ -222,14 +220,15 @@ void addCar() {
 
 
 void removeCar() {
-  char carPlate [8];
-  int opt,
+  char carPlate [8],
+       buff[20];
+  int minutes,
+      opt,
       carFoundIndex,
       aux, i;
   time_t now;
-  char buff[20];
-  int minutes;
   float hoursValue;
+  long int exitTime;
 
   printf("\n  Carro saindo\n\tDigite a placa:  ");
   scanf("%s", carPlate);
@@ -261,8 +260,8 @@ void removeCar() {
     convertTime(exitTime,1);
     printf ("\n\tEstadia: %dh %dmins.\n\tValor: R$ %.2f.\n", minutes/60, minutes%60, hoursValue);
     printf ("\n\t Confirma? ( 1 para Sim / 2 para Corrigir / 3 para Voltar): ");
-    scanf ("%s", &opt);
-    if (opt=='1') {
+    scanf ("%d", &opt);
+    if (opt== 1) {
       totalValue += hoursValue;
       fprintf (fileP, "%s\t",carPlate);
       convertTime(entryTime[i],0);
@@ -274,7 +273,7 @@ void removeCar() {
       carInSlot[aux][0] = '\0';
       sleep(1);
       }
-   else if (opt=='2') removeCar();
+   else if (opt==2) removeCar();
    }
   return;
 }
@@ -291,8 +290,8 @@ void carList() {
    if ((carInSlot[i][0]) != '\0' ) {
       printf("\n\t|   %2d   |  %8s  |      ", i+1, carInSlot[i]);
       convertTime (entryTime[i],1);
-      printf ("       |");
-      printf("\n\t-------------------------------------------\n");
+      printf ("       |\n");
+      printf("\t-------------------------------------------");
     }
   }
  return;
@@ -452,9 +451,9 @@ fprintf (prnt, "Nao trabalhamos com pernoite\n\n");
 fprintf (prnt, "     Agradecemos a preferencia\n");
 fprintf (prnt, "____________________________________\n");
 
-fprintf(prnt, "\f");
+fprintf (prnt, "\f");
 
-fclose(prnt);
+fclose (prnt);
 
 return (0);
 
@@ -490,9 +489,9 @@ fprintf (prnt, "De Segunda-Feira a Sabado \n");
 fprintf (prnt, "Nao trabalhamos com pernoite\n\n");
 fprintf (prnt, "     Agradecemos a preferencia\n\n");
 
-fprintf(prnt, "\f");
+fprintf (prnt, "\f");
 
-fclose(prnt);
+fclose (prnt);
 
 return (0);
 
